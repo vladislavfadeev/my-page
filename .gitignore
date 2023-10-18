@@ -1,7 +1,6 @@
 .venv
 .vscode
 __pycache__
-Dockerfile
 config.yaml
 eee.py
 database.db
