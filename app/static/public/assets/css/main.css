@@ -2039,14 +2039,15 @@ body {
 .md-effect-12 .md-content h3 {
     font-family: 'PressStart';
     background-color: #1769ff;
+    color: #ffffff;
 }
 
 .md-effect-12 .md-content {
+    color: #cccccc;
     padding: 5px;
-    background-color: #1c1c1cf5;
-    /* font-family: 'Starseed'; */
+    background-color: #1d1d1df5;
     font-family: 'CMUSansSerif';
-    border: 2px solid;
+    border: 2px solid #6a0d6a;
     font-size: 18px;
 }
 

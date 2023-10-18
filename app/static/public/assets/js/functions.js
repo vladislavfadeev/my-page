@@ -58,7 +58,7 @@ $( document ).ready(function() {
 
     var curActive = $('.side-nav').find('.is-active'),
         curPos = $('.side-nav').children().index(curActive),
-        lastItem = $('.side-nav').children().length - 1,
+        lastItem = $('.side-nav').children().length - 4,
         nextPos = lastItem;
 
     updateNavs(lastItem);

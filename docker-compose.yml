@@ -6,7 +6,7 @@ services:
     build:
       context: .
     volumes:
-      - ~/prod/nginx/staticfiles/vfadeev/static:/src/static
+      - ~/prod/nginx/staticfiles/vfadeev/static:/src/app/static
       - ~/prod/vfadeev/src/:/src/
     command: sh -c "gunicorn -b 0.0.0.0:8000 --pythonpath /src main:app -w 1 --threads 1 --log-level=info"
 
