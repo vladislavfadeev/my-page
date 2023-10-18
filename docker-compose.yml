@@ -10,7 +10,6 @@ services:
       - ~/prod/vfadeev/src/:/src/
     command: sh -c "gunicorn -b 0.0.0.0:8000 --pythonpath /src main:app -w 1 --threads 1 --log-level=info"
 
-
   vfadeev-certbot:
     image: certbot/certbot
     restart: unless-stopped
@@ -18,3 +17,9 @@ services:
     volumes:
       - ~/prod/nginx/certbot/conf/vfadeev:/etc/letsencrypt
       - ~/prod/nginx/certbot/www/vfadeev:/var/www/certbot
+
+networks:
+  default:
+    name: src_default
+    external: true
+
