@@ -258,7 +258,7 @@ $( document ).ready(function() {
 
   function transitionLabels() {
 
-    $('.work-request--information input').focusout(function(){
+    $('.work-request--information input, textarea').focusout(function(){
 
       var textVal = $(this).val();
 
@@ -275,6 +275,73 @@ $( document ).ready(function() {
     });
 
   }
+
+  var form = document.getElementById('feedback-form');
+  form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      spinnerActions('on');
+      var formData = new FormData(form);
+      fetch('/feedback', {
+          method: 'POST',
+          body: formData
+      })
+      .then(function (response) {
+          if (response.ok) {
+              spinnerActions('off');
+              alert('Сообщение отправлено!');
+          } else {
+              spinnerActions('off');
+              alert(
+                'Что-то пошло не так, попробуйте другой способ связи со мной. ',
+                'См. раздел "контакты"'
+              );
+          }
+      })
+      .catch(function (error) {
+          spinnerActions('off');
+          alert(
+            'Что-то пошло не так, попробуйте другой способ связи со мной. ',
+            'См. раздел "контакты"'
+          );
+      });
+  });
+
+  function spinnerActions(action) {
+    var button = document.getElementById('feedback-submit')
+    var spinner = document.getElementById('submit-spinner')
+
+    if (action === 'on') {
+        button.disabled = true;
+        spinner.classList.remove('submit-spinner_hide');
+    }
+    if (action === 'off') {
+        button.disabled = false;
+        spinner.classList.add('submit-spinner_hide');
+    }
+  }
+
+
+  $(function () {
+      $('.md-trigger').on('click', function() {
+          var modalId = $(this).data('modal');
+          $('#' + modalId).addClass('md-show');
+          $('.header--modal-close').addClass('show');
+      });
+
+      $('.md-close').on('click', function() {
+          $('.md-modal').removeClass('md-show');
+          $('.header--modal-close').removeClass('show');
+      });
+
+      $('.md-overlay').on('click', function() {
+          $('.md-modal').removeClass('md-show');
+          $('.header--modal-close').removeClass('show');
+      });
+  });
+
+  window.addEventListener('DOMContentLoaded',function(){
+      new SmartPhoto(".js-smartPhoto");
+  });
 
   outerNav();
   workSlider();

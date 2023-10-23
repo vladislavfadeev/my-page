@@ -28,7 +28,7 @@
       <div class="l-wrapper">
         <header class="header">
           <div class="logo-wrap">
-              <a href="#" class="logo">FV<span class="flsh">A</span></a>
+              <a href="" class="logo">FV<span class="flsh">A</span></a>
           </div>
           <div class="header--nav-toggle">
             <span></span>
@@ -142,22 +142,24 @@
               <h2>Написать мне в telegram</h2>
               <!-- checkout formspree.io for easy form setup -->
               <div class="work-request--information">
-                <form class="work-request">
+                <form class="work-request" id="feedback-form">
                   <div style="display: block; width: 400px; max-width: 90%;">
                     <div class="information-name">
-                      <input id="name" type="text" spellcheck="false">
+                      <input id="name" name="name" type="text" required spellcheck="false">
                       <label for="name">Имя</label>
                     </div>
                     <div class="information-email">
-                      <input id="email" type="email" spellcheck="false">
-                      <label for="email">Ваш email</label>
+                      <input id="contact" name="contact" type="text" required spellcheck="false">
+                      <label for="contact">Ваш контакт</label>
                     </div>
                     <div class="information-msg">
-                      <textarea class="input-field" id="msg" spellcheck="false"></textarea>
-                      <label for="msg">Сообщение</label>
+                      <textarea class="input-field" name="message" required id="message" spellcheck="false"></textarea>
+                      <label for="message">Сообщение</label>
                     </div>
                   </div>
-                  <input type="submit" value="Отправить">
+                  <!-- <input class="submit-spinner submit-spinner_hide" type="submit" value="Отправить"> -->
+                  <button id="feedback-submit">
+                    <span class="submit-spinner submit-spinner_hide" id="submit-spinner"></span>Отправить</button>
                 </form>
               </div>
             </div>
@@ -218,40 +220,5 @@
 <script src="{{ url_for('public.static', filename='assets/js/functions.js') }}"></script>
 <script src="{{ url_for('public.static', filename='assets/js/vendor/hammer-2.0.8.js') }}"></script>
 <script src="{{ url_for('public.static', filename='assets/js/smartphoto.min.js') }}"></script>
-<script>
-
-  document.addEventListener("input", function (e) {
-      if (e.target && e.target.classList.contains("input-field")) {
-          if (e.target.value.trim() !== "") {
-              e.target.classList.add("has-value");
-          } else {
-              e.target.classList.remove("has-value");
-          }
-      }
-  });
-
-  $(function () {
-      $('.md-trigger').on('click', function() {
-          var modalId = $(this).data('modal');
-          $('#' + modalId).addClass('md-show');
-          $('.header--modal-close').addClass('show');
-      });
-
-      $('.md-close').on('click', function() {
-          $('.md-modal').removeClass('md-show');
-          $('.header--modal-close').removeClass('show');
-      });
-
-      $('.md-overlay').on('click', function() {
-          $('.md-modal').removeClass('md-show');
-          $('.header--modal-close').removeClass('show');
-      });
-  });
-
-  window.addEventListener('DOMContentLoaded',function(){
-      new SmartPhoto(".js-smartPhoto");
-  });
-
-</script>
 </body>
 </html>

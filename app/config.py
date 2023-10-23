@@ -10,6 +10,7 @@ appConfig = confuse.Configuration('APP')
 
 class Config:
     TG_USER_ID = appConfig['feedback']['tg_id'].get()
+    TG_BOT_TOKEN = appConfig['feedback']['bot_token'].get()
     SECRET_KEY = appConfig['app']['secret'].get() or os.urandom(24)
     LANGUAGES = ['ru', 'en']    
     

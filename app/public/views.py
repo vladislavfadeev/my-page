@@ -1,8 +1,15 @@
-from flask import render_template
+from flask import render_template, request, make_response, jsonify
+import requests
 
-from flask import render_template
-from app.admin.models import AboutMeModel, LocationContactModel, MyWorksModel, SocialContactModel
+from app.config import Config
+from app.admin.models import (
+    AboutMeModel,
+    LocationContactModel,
+    MyWorksModel,
+    SocialContactModel,
+)
 from app.public import blueprint
+from app.public.forms import FeedbackForm
 
 
 @blueprint.route("/")
@@ -23,3 +30,26 @@ def index():
         location_items=location_items,
         social_items=social_items,
     )
+
+
+@blueprint.route("/feedback", methods=("POST",))
+def feedbak():
+    form = FeedbackForm(request.form)
+    if form.validate():
+        message = (
+            "New message from vfadeev.dev!\n\n"
+            f"u/a: {request.user_agent}\n"
+            f"ip: {request.remote_addr}\n"
+            f"name: {form.name.data}\n"
+            f"contact: {form.contact.data}\n"
+            f"message: {form.message.data}"
+        )
+        result = requests.get(
+            f"https://api.telegram.org/bot{Config.TG_BOT_TOKEN}"
+            f"/sendMessage?chat_id={Config.TG_USER_ID}&text={message}"
+        )
+        if result.status_code == 200:
+            data = {'ok': True}
+            return make_response(jsonify(data), 200)
+    data = {'ok': False}
+    return make_response(jsonify(data), 400)
