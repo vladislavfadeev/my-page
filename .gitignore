@@ -4,5 +4,6 @@ __pycache__
 config.yaml
 eee.py
 database.db
+works
 *.jpg
 *.gif

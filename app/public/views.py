@@ -39,7 +39,7 @@ def feedbak():
         message = (
             "New message from vfadeev.dev!\n\n"
             f"u/a: {request.user_agent}\n"
-            f"ip: {request.remote_addr}\n"
+            f"ip: {request.environ['HTTP_X_FORWARDED_FOR']}\n"
             f"name: {form.name.data}\n"
             f"contact: {form.contact.data}\n"
             f"message: {form.message.data}"
