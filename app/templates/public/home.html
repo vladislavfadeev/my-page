@@ -63,7 +63,9 @@
             <div class="about">
               <div class="about--banner">
                 <h2>Рассказал подробнее<br>о себе ниже</h2>
-                <a href="static/public/FVA_resume.pdf" style="text-decoration:underline; font-size: 20px; background-color: rgba(0, 0, 0, 0.611);">Получить резюме</a>
+                <a href="static/public/FVA_resume.pdf" target="_blank" 
+                  style="text-decoration:underline; font-size: 20px; background-color: rgba(0, 0, 0, 0.611);">
+                  Получить резюме</a>
                 <div class="about--options">
                   {% for item in info_items %}
                     <button class="md-trigger" data-modal="about-{{ item.id }}">
