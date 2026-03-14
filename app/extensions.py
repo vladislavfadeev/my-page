@@ -17,5 +17,5 @@ ckeditor = CKEditor()
 babel = Babel()
 db = SQLAlchemy(model_class=Base)
 migrate = Migrate()
-admin_panel = Admin(name='fva-web', template_mode='bootstrap4') #  base_template='my_master.html',
+admin_panel = Admin(name='fva-web',)# template_mode='bootstrap4') #  base_template='my_master.html',
 login_manager = LoginManager()

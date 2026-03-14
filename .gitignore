@@ -1,4 +1,8 @@
 .venv
+.venv.old
+.env
+nginx
+requirements.txt.old
 .vscode
 __pycache__
 config.yaml
