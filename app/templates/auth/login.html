@@ -1,45 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FVA Login Page</title>
+    <title>Вход — vfadeev.dev</title>
+    <link rel="stylesheet" href="{{ url_for('blog.static', filename='assets/css/blog.css') }}">
 </head>
 <body>
-    <div class="row-fluid">
+    <div class="blog-wrapper">
+      <header class="blog-header">
+        <a href="{{ url_for('blog.index') }}" class="blog-logo">FV<span class="flsh">A</span></a>
+        <nav class="blog-nav">
+          <a href="{{ url_for('blog.index') }}">Blog</a>
+          <a href="{{ url_for('public.index') }}">Home</a>
+        </nav>
+      </header>
 
-        <div>
-            {% if current_user.is_authenticated %}
-            <h1>Flask-Admin example</h1>
-            <p class="lead">
-                Authentication
-            </p>
-            <p>
-                This example shows how you can use Flask-Login for authentication. It is only intended as a basic demonstration.
-            </p>
-            {% else %}
-            <form method="POST" action="">
-                {{ form.hidden_tag() if form.hidden_tag }}
-                {% for f in form if f.type != 'CSRFTokenField' %}
-                <div class="form-group">
-                {{ f.label }}<br>
-                {{ f }}
-                {% if f.errors %}
-                <ul>
-                    {% for e in f.errors %}
-                    <li>{{ e }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                </div>
-                {% endfor %}
-                <button class="btn btn-primary" type="submit">Submit</button>
-            </form>
-            {{ link | safe }}
+      <main class="blog-main">
+        <div class="blog-login">
+          <h1 class="blog-title">Вход</h1>
+
+          <div class="blog-oauth">
+            {% if oauth_config.google.client_id %}
+              <a class="blog-oauth-btn"
+                 href="{{ url_for('auth.oauth_start', provider='google', next=next_url) }}">
+                Войти через Google
+              </a>
             {% endif %}
+            {% if oauth_config.github.client_id %}
+              <a class="blog-oauth-btn"
+                 href="{{ url_for('auth.oauth_start', provider='github', next=next_url) }}">
+                Войти через GitHub
+              </a>
+            {% endif %}
+            {% if tg_bot_username %}
+              <script async src="https://telegram.org/js/telegram-widget.js?22"
+                      data-telegram-login="{{ tg_bot_username }}"
+                      data-size="large"
+                      data-auth-url="{{ url_for('auth.oauth_telegram', _external=True) }}"
+                      data-request-access="write"></script>
+            {% endif %}
+          </div>
+
+          <form method="POST" action="{{ url_for('auth.LoginView:post', next=next_url) }}" class="blog-login-form">
+            {{ form.hidden_tag() if form.hidden_tag }}
+            {% for f in form if f.type != 'CSRFTokenField' %}
+              <label>
+                {{ f.label.text }}
+                {{ f(class_='blog-input') }}
+              </label>
+              {% if f.errors %}
+                <ul class="blog-login-errors">
+                  {% for e in f.errors %}<li>{{ e }}</li>{% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+            <button type="submit">Войти</button>
+          </form>
+
+          <p class="blog-login-hint">
+            Нет аккаунта?
+            <a href="{{ url_for('auth.register', next=next_url) }}">Зарегистрируйтесь</a>
+          </p>
         </div>
-    
-        <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
+      </main>
+
+      <footer class="blog-footer">
+        <p>&copy; vfadeev.dev</p>
+      </footer>
     </div>
 </body>
 </html>

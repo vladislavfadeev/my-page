@@ -1,0 +1,95 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+{% block meta_description %}{{ post.preview_text }}{% endblock %}
+
+{% block head %}
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://vfadeev.dev{{ url_for('blog.post', slug=post.slug) }}">
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:description" content="{{ post.preview_text }}">
+<meta property="og:site_name" content="vfadeev.dev">
+{% endblock %}
+
+{% block content %}
+<article class="blog-article">
+  <a href="{{ url_for('blog.index') }}" class="blog-back">&larr; все записи</a>
+
+  <header class="blog-article-header">
+    <h1>{{ post.title }}</h1>
+    <div class="blog-article-meta">
+      <time>{{ post.created_at.strftime('%d.%m.%Y') }}</time>
+      <span class="blog-article-views">👁 {{ post.views_count }}</span>
+      {% if post.tags %}
+      <div class="blog-article-tags">
+        {% for tag in post.tags %}
+          <a href="{{ url_for('blog.by_tag', slug=tag.slug) }}" class="blog-tag">#{{ tag.name }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="blog-article-content">
+    {{ post.content|safe }}
+  </div>
+
+  <section id="reactions" class="blog-reactions">
+    {% if current_user.is_authenticated %}
+      <form method="POST" action="{{ url_for('blog.react', slug=post.slug, action='like') }}">
+        <button type="submit" class="blog-reaction {% if user_reaction == 'like' %}blog-reaction--active{% endif %}">
+          👍 <span>{{ post.likes_count }}</span>
+        </button>
+      </form>
+      <form method="POST" action="{{ url_for('blog.react', slug=post.slug, action='dislike') }}">
+        <button type="submit" class="blog-reaction {% if user_reaction == 'dislike' %}blog-reaction--active{% endif %}">
+          👎 <span>{{ post.dislikes_count }}</span>
+        </button>
+      </form>
+    {% else %}
+      <span class="blog-reaction blog-reaction--static">👍 {{ post.likes_count }}</span>
+      <span class="blog-reaction blog-reaction--static">👎 {{ post.dislikes_count }}</span>
+      <a class="blog-reaction-login" href="{{ url_for('auth.LoginView:get') }}?next={{ request.path }}">войдите, чтобы оценить</a>
+    {% endif %}
+  </section>
+
+  <section id="comments" class="blog-comments">
+    <h2 class="blog-comments-title">Комментарии ({{ post.comments|length }})</h2>
+
+    {% if current_user.is_authenticated %}
+      <form method="POST" action="{{ url_for('blog.add_comment', slug=post.slug) }}" class="blog-comment-form">
+        <textarea name="content" rows="3" placeholder="Ваш комментарий..." required minlength="2" maxlength="2000"></textarea>
+        <button type="submit">Отправить</button>
+      </form>
+    {% else %}
+      <p class="blog-comments-login">
+        <a href="{{ url_for('auth.LoginView:get') }}?next={{ request.path }}">Войдите</a>, чтобы оставить комментарий.
+      </p>
+    {% endif %}
+
+    {% if post.comments %}
+      <ul class="blog-comment-list">
+        {% for c in post.comments %}
+        <li class="blog-comment">
+          <div class="blog-comment-head">
+            {% if c.user.avatar_url %}
+              <img src="{{ c.user.avatar_url }}" alt="" class="blog-comment-avatar">
+            {% endif %}
+            <span class="blog-comment-author">{{ c.user.display_name }}</span>
+            <time>{{ c.created_at.strftime('%d.%m.%Y %H:%M') }}</time>
+            {% if current_user.is_authenticated and (current_user.id == c.user_id or current_user.is_admin) %}
+              <form method="POST" action="{{ url_for('blog.delete_comment', comment_id=c.id) }}" class="blog-comment-delete">
+                <button type="submit" title="Удалить">✕</button>
+              </form>
+            {% endif %}
+          </div>
+          <div class="blog-comment-body">{{ c.content }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </section>
+
+  <a href="{{ url_for('blog.index') }}" class="blog-back">&larr; все записи</a>
+</article>
+{% endblock %}

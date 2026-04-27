@@ -8,3 +8,4 @@ blueprint = Blueprint('auth', __name__,
 
 
 views.LoginView.register(blueprint)
+views.register_routes(blueprint)

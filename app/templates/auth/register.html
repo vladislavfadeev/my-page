@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — vfadeev.dev</title>
+    <link rel="stylesheet" href="{{ url_for('blog.static', filename='assets/css/blog.css') }}">
+</head>
+<body>
+    <div class="blog-wrapper">
+      <header class="blog-header">
+        <a href="{{ url_for('blog.index') }}" class="blog-logo">FV<span class="flsh">A</span></a>
+        <nav class="blog-nav">
+          <a href="{{ url_for('blog.index') }}">Blog</a>
+          <a href="{{ url_for('public.index') }}">Home</a>
+        </nav>
+      </header>
+
+      <main class="blog-main">
+        <div class="blog-login">
+          <h1 class="blog-title">Регистрация</h1>
+
+          <form method="POST" action="{{ url_for('auth.register', next=next_url) }}" class="blog-login-form">
+            {% for f in form if f.name != 'captcha' %}
+              <label>
+                {{ f.label.text }}
+                {{ f(class_='blog-input') }}
+              </label>
+              {% if f.errors %}
+                <ul class="blog-login-errors">
+                  {% for e in f.errors %}<li>{{ e }}</li>{% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+
+            <label>
+              Код с картинки
+              <span class="blog-captcha">{{ captcha_svg }}</span>
+              {{ form.captcha(class_='blog-input', autocomplete='off') }}
+            </label>
+            {% if form.captcha.errors %}
+              <ul class="blog-login-errors">
+                {% for e in form.captcha.errors %}<li>{{ e }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+
+            <button type="submit">Зарегистрироваться</button>
+          </form>
+
+          <p class="blog-login-hint">
+            Уже есть аккаунт?
+            <a href="{{ url_for('auth.LoginView:get', next=next_url) }}">Войти</a>
+          </p>
+        </div>
+      </main>
+
+      <footer class="blog-footer">
+        <p>&copy; vfadeev.dev</p>
+      </footer>
+    </div>
+</body>
+</html>
