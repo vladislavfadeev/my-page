@@ -8,7 +8,7 @@ services:
     volumes:
       - /opt/prod/nginx/staticfiles/vfadeev/static:/src/app/static
       - /opt/prod/vfadeev:/src
-    command: sh -c "gunicorn -b 0.0.0.0:8000 --pythonpath /src main:app -w 1 --threads 1 --log-level=info"
+    command: sh -c "flask --app main:app db upgrade && gunicorn -b 0.0.0.0:8000 --pythonpath /src main:app -w 1 --threads 1 --log-level=info"
 
   vfadeev-certbot:
     image: certbot/certbot
