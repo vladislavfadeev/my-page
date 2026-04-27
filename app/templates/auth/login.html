@@ -33,14 +33,33 @@
                 Войти через GitHub
               </a>
             {% endif %}
-            {% if tg_bot_username %}
-              <script async src="https://telegram.org/js/telegram-widget.js?22"
-                      data-telegram-login="{{ tg_bot_username }}"
-                      data-size="large"
-                      data-auth-url="{{ url_for('auth.oauth_telegram', _external=True) }}"
-                      data-request-access="write"></script>
+            {% if tg_bot_id %}
+              <a class="blog-oauth-btn" href="#" id="tg-login-btn">Войти через Telegram</a>
             {% endif %}
           </div>
+
+          {% if tg_bot_id %}
+          <script src="https://telegram.org/js/telegram-widget.js?22"></script>
+          <script>
+            (function () {
+              var btn = document.getElementById('tg-login-btn');
+              var nextUrl = {{ next_url|tojson }};
+              btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!window.Telegram || !window.Telegram.Login) return;
+                Telegram.Login.auth(
+                  { bot_id: '{{ tg_bot_id }}', request_access: 'write' },
+                  function (data) {
+                    if (!data) return;
+                    var params = new URLSearchParams(data);
+                    if (nextUrl) params.set('next', nextUrl);
+                    window.location.href = "{{ url_for('auth.oauth_telegram') }}?" + params.toString();
+                  }
+                );
+              });
+            })();
+          </script>
+          {% endif %}
 
           <form method="POST" action="{{ url_for('auth.LoginView:post', next=next_url) }}" class="blog-login-form">
             {{ form.hidden_tag() if form.hidden_tag }}

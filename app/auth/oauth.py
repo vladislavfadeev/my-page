@@ -157,4 +157,5 @@ def telegram_callback():
         username=username or f"tg_{data['id']}",
         avatar_url=data.get('photo_url'),
     )
-    return redirect(session.pop('oauth_next', None) or url_for('blog.index'))
+    nxt = request.args.get('next') or session.pop('oauth_next', None) or ''
+    return redirect(nxt if nxt.startswith('/') else url_for('blog.index'))

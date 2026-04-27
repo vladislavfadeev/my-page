@@ -30,6 +30,7 @@ class Config:
     TG_BOT_TOKEN = appConfig['feedback']['bot_token'].get()
     TG_BOT_USERNAME = _opt('oauth', 'telegram_bot_username', default=None)
     TG_AUTH_BOT_TOKEN = _opt('oauth', 'telegram_bot_token', default=None)
+    TG_AUTH_BOT_ID = TG_AUTH_BOT_TOKEN.split(':')[0] if TG_AUTH_BOT_TOKEN else None
     SECRET_KEY = appConfig['app']['secret'].get() or os.urandom(24)
     LANGUAGES = ['ru', 'en']
 

@@ -38,7 +38,7 @@ class LoginView(FlaskView):
             'auth/login.html',
             form=form,
             oauth_config=Config.OAUTH,
-            tg_bot_username=Config.TG_BOT_USERNAME,
+            tg_bot_id=Config.TG_AUTH_BOT_ID,
             next_url=request.args.get('next', ''),
         )
 
