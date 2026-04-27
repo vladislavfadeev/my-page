@@ -1,4 +1,5 @@
 from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.public import blueprint as public_bp
 from app.auth import blueprint as login_bp
@@ -36,6 +37,7 @@ from app.blog.admin import BlogPostView, BlogTagView, CommentView
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     admin_panel._set_admin_index_view(index_view=MyAdminIndexView())
     admin_panel.add_view(
