@@ -135,7 +135,7 @@ def telegram_callback():
     if not Config.TG_AUTH_BOT_TOKEN:
         abort(404)
 
-    data = {k: v for k, v in request.args.items() if k != 'hash'}
+    data = {k: v for k, v in request.args.items() if k not in ('hash', 'next')}
     received_hash = request.args.get('hash')
     if not received_hash:
         abort(400)
